@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Colored Stat Card with Hollow Ranks</title>
+<style>
+  #start-screen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9 );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: white;
+  }
+  #start-box {
+    background: #00418b;
+    broder: 2px solid var(--accent);
+    border-radius: 16px;
+    padding: 24px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 0 20px var(--accent);
+  }
+
+.start-box input {
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #111;
+  color: white;
+}
+.start-box button {
+  margin-top: 12px;
+  padding: 10px 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+}
+.start-box button:hover {
+  background: #2c9bbf;
+}
+:root {
+  --bg: #0a0f1a;
+  --panel: #10243a;
+  --panel-2: #0e1d31;
+  --accent: #38e8ff;
+  --accent-soft: rgba(56, 232, 255, 0.3);
+  --bar-empty: #3a3a3a;
+  --text: #dfe7f1;
+  --muted: #93a7c0;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; font-family: Arial, sans-serif; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: radial-gradient(1200px 600px at 20% 0%, #0c1a2b, #07101a 60%, #060a12 100%), var(--bg);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.card {
+  width: min(960px, 95vw);
+  background: linear-gradient(180deg, #0e2136 0%, #0a1626 100%);
+  border: 2px solid var(--accent);
+  border-radius: calc(var(--radius) + 8px);
+  padding: 24px 28px 30px;
+}
+
+.frame {
+  border: 2px solid rgba(56, 232, 255, .35);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+  align-items: stretch;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  background: linear-gradient(145deg, #143257, #0b213a 60%);
+  box-shadow: inset 0 0 0 2px var(--accent-soft);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: .08em;
+  font-size: 20px;
+}
+
+.info-box {
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  background: #0b1c30;
+  box-shadow: inset 0 0 0 2px var(--accent-soft);
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+  font-size: 18px;
+}
+
+.info-label { color: var(--muted); font-size: 16px; letter-spacing: .06em; }
+.info-value { font-weight: 700; font-size: 18px; text-align: right; }
+
+.stats { margin-top: 16px; display: grid; gap: 18px; }
+
+.row {
+  display: grid;
+  grid-template-columns: 140px 50px 1fr 140px;
+  align-items: center;
+  gap: 8px;
+}
+
+.rank-label {
+  font-weight: 700;
+  font-size: 13px;
+  text-align: right;
+  letter-spacing: .04em;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 6px rgba(255,255,255,0.4); /* base glow */
+}
+
+.rank-flash {
+  animation: flash 0.6s ease;
+}
+
+@keyframes flash {
+  0% { text-shadow: 0 0 6px #fff, 0 0 12px #38e8ff; }
+  50% { text-shadow: 0 0 20px #fff, 0 0 30px #38e8ff; }
+  100% { text-shadow: 0 0 6px #fff, 0 0 12px #38e8ff; }
+}
+
+.label { color: #e8f5ff; font-weight: 800; letter-spacing: .06em; font-size: 18px; }
+
+.bar {
+  width: 100%;
+  height: 40px;
+  background: var(--bar-empty);
+  border-radius: 8px;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.tick {
+  flex: none;
+  aspect-ratio: 2 / 2;
+  background-color: #555;
+  border-radius: 0px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
+}
+
+button {
+  background-color: #222;
+  border: 1px solid #444;
+  color: white;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 4px;
+}
+button:hover { background-color: #444; }
+
+select {
+  background-color: #222;
+  border: 1px solid #444;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+@media (max-width: 520px) {
+  .row { grid-template-columns: 100px 40px 1fr 100px; }
+  .bar { height: 30px; }
+}
+</style>
+</head>
+<body>
+<div id="start-screen">
+  <div id="start-box">
+<h2> Incoming System Call...   </h2>
+<p> Enter your credentials to access your status card </p>
+<label>USERNAME:</label>
+<input type="text" id="username-input" placeholder="Enter your username" />
+<label>HEIGHT:</label>  
+<input type="number" id="height-input" placeholder="Enter your height in cm" />
+<label>WEIGHT:</label>
+<input type="number" id="weight-input" placeholder="Enter your weight in kg" />
+<button onclick="startsystem()">Start</button>
+  </div>
+</div>
+<div class="card">
+  <div class="frame">
+    <div class="header">
+      <div class="avatar">USERNAME</div>
+      <div class="info-box">
+        <div class="info-label">HEIGHT</div><div class="info-value" id="height">182 cm</div>
+        <div class="info-label">WEIGHT</div><div class="info-value" id="weight">78 kg</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="row" data-stat="str">
+        <div class="label">STRENGTH</div>
+        <div class="rank-label">E</div>
+        <div class="bar"></div>
+        <div>
+          <select id="str-select">
+            <option value="1">+1</option><option value="5">+5</option><option value="10">+10</option>
+            <option value="50">+50</option><option value="100">+100</option>
+            <option value="-10">-10</option><option value="-50">-50</option><option value="-100">-100</option>
+          </select>
+          <button onclick="incrementStat('str')">Add</button>
+        </div>
+      </div>
+
+      <div class="row" data-stat="agi">
+        <div class="label">AGILITY</div>
+        <div class="rank-label">E</div>
+        <div class="bar"></div>
+        <div>
+          <select id="agi-select">
+            <option value="1">+1</option><option value="5">+5</option><option value="10">+10</option>
+            <option value="50">+50</option><option value="100">+100</option>
+            <option value="-10">-10</option><option value="-50">-50</option><option value="-100">-100</option>
+          </select>
+          <button onclick="incrementStat('agi')">Add</button>
+        </div>
+      </div>
+
+      <div class="row" data-stat="int">
+        <div class="label">INTELLIGENCE</div>
+        <div class="rank-label">E</div>
+        <div class="bar"></div>
+        <div>
+          <select id="int-select">
+            <option value="1">+1</option><option value="5">+5</option><option value="10">+10</option>
+            <option value="50">+50</option><option value="100">+100</option>
+            <option value="-10">-10</option><option value="-50">-50</option><option value="-100">-100</option>
+          </select>
+          <button onclick="incrementStat('int')">Add</button>
+        </div>
+      </div>
+
+      <div class="row" data-stat="end">
+        <div class="label">ENDURANCE</div>
+        <div class="rank-label">E</div>
+        <div class="bar"></div>
+        <div>
+          <select id="end-select">
+            <option value="1">+1</option><option value="5">+5</option><option value="10">+10</option>
+            <option value="50">+50</option><option value="100">+100</option>
+            <option value="-10">-10</option><option value="-50">-50</option><option value="-100">-100</option>
+          </select>
+          <button onclick="incrementStat('end')">Add</button>
+        </div>
+      </div>
+
+      <div class="row" data-stat="chrm">
+        <div class="label">CHARM</div>
+        <div class="rank-label">E</div>
+        <div class="bar"></div>
+        <div>
+          <select id="chrm-select">
+            <option value="1">+1</option><option value="5">+5</option><option value="10">+10</option>
+            <option value="50">+50</option><option value="100">+100</option>
+            <option value="-10">-10</option><option value="-50">-50</option><option value="-100">-100</option>
+          </select>
+          <button onclick="incrementStat('chrm')">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function startsystem() {
+  const username = document.getElementById('username-input').value;
+  const height = document.getElementById('height-input').value;
+  const weight = document.getElementById('weight-input').value;
+
+  if (!username || !height || !weight) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  document.querySelector('.avatar').textContent = username;
+  document.getElementById('height').textContent = `${height} cm`;
+  document.getElementById('weight').textContent = `${weight} kg`;
+
+  document.getElementById('start-screen').style.display = 'none';
+}
+
+
+
+
+const stats = { str:0, agi:0, int:0, end:0, chrm:0 };
+const lastRanks = { str:"E", agi:"E", int:"E", end:"E", chrm:"E" };
+
+const rankList = [
+  {name:"E", min:0},{name:"E+", min:1},{name:"D", min:5},{name:"D+", min:10},
+  {name:"C", min:20},{name:"C+", min:30},{name:"B", min:40},{name:"B+", min:50},
+  {name:"A", min:60},{name:"A+", min:70},{name:"AA", min:75},{name:"AA+", min:85},
+  {name:"S", min:90},{name:"S+", min:100},{name:"SS", min:105},{name:"SS+", min:115},
+  {name:"SSS", min:120},{name:"SSS+", min:130},{name:"SR", min:140},{name:"SR+", min:150},
+  {name:"SSR", min:160},{name:"SSR+", min:180},{name:"UR", min:190},{name:"UR+", min:210},
+  {name:"LR", min:220},{name:"LR+", min:240},{name:"MR", min:250},{name:"MR+", min:270},
+  {name:"X", min:280},{name:"X+", min:320},{name:"XX", min:350},{name:"XX+", min:410},
+  {name:"XXX-", min:440},{name:"XXX", min:470},{name:"XXX+", min:500},{name:"EX", min:530},
+  {name:"EX+", min:590},{name:"DX", min:620},{name:"DX+", min:700},{name:"CX", min:900},
+  {name:"CX+", min:950},{name:"BX", min:975},{name:"BX+", min:1025},{name:"AX", min:1050},
+  {name:"AX+", min:1100},{name:"SX", min:1125},{name:"SX+", min:1175},{name:"Unmeasurable", min:1450}
+];
+
+const rankColors = {
+  "E":"#555","E+":"#66aaff","D":"#00ffff","D+":"#00ff99","C":"#00ff66","C+":"#66ff00",
+  "B":"#3CDFFF","B+":"#3CDFFF","A":"#ffaa00","A+":"#ff6600","AA":"#ff3333","AA+":"#ff00ff",
+  "S":"red","S+":"red","SS":"red","SS+":"red","SSS":"red","SSS+":"red",
+  "SR":"#FF6200","SR+":"#FF6200","SSR":"#8b008b","SSR+":"#8b008b","UR":"#33ff33","UR+":"#66ff66",
+  "LR":"#99ff33","LR+":"#ccff33","MR":"#ffff33","MR+":"#ffcc33","X":"#8B0000","X+":"#8B0000",
+  "XX":"#8B0000","XX+":"#8B0000","XXX-":"#8B0000","XXX":"#8B0000","XXX+":"#8B0000",
+  "EX":"#8B0000","EX+":"#8B0000","DX":"#8B0000","DX+":"#8B0000","CX":"#8B0000","CX+":"#8B0000",
+  "BX":"#8B0000","BX+":"#8B0000","AX":"#8B0000","AX+":"#8B0000","SX":"#8B0000","SX+":"#8B0000",
+  "Unmeasurable":"#8B0000"
+};
+
+function getRank(value){
+  let rank="E";
+  for(let r of rankList){
+    if(value>=r.min) rank=r.name;
+  }
+  return rank;
+}
+
+function updateBar(stat){
+  const row = document.querySelector(`.row[data-stat=${stat}]`);
+  const bar = row.querySelector('.bar');
+  const rankLabel = row.querySelector('.rank-label');
+  const value = stats[stat];
+  const rank = getRank(value);
+
+  // Flash animation if rank changed
+  if(rank!==lastRanks[stat]){
+    rankLabel.classList.add('rank-flash');
+    setTimeout(()=> rankLabel.classList.remove('rank-flash'),600);
+    lastRanks[stat]=rank;
+  }
+
+  rankLabel.textContent = rank;
+  rankLabel.style.color = rankColors[rank] || "#fff";
+  rankLabel.style.textShadow = `0 0 8px ${rankColors[rank] || "#38e8ff"}, 0 0 16px ${rankColors[rank] || "#38e8ff"}`;
+
+  bar.innerHTML="";
+  const ticks = Math.min(Math.floor(value/5),20);
+  for(let i=0;i<20;i++){
+    const tick = document.createElement('div');
+    tick.className='tick';
+    if(i<ticks){
+      tick.style.backgroundColor=rankColors[rank] || "#38e8ff";
+      tick.style.boxShadow=`0 0 8px ${rankColors[rank] || "#38e8ff"}, 0 0 16px ${rankColors[rank] || "#38e8ff"}`;
+    } else {
+      tick.style.backgroundColor="#555";
+      tick.style.boxShadow="inset 0 0 4px rgba(0,0,0,0.5)";
+    }
+    bar.appendChild(tick);
+  }
+}
+
+function incrementStat(stat){
+  const select = document.getElementById(`${stat}-select`);
+  stats[stat]+=parseInt(select.value);
+  updateBar(stat);
+}
+
+for(let stat in stats) updateBar(stat);
+</script>
+
+</body>
+</html>

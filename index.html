@@ -374,7 +374,11 @@ function updateBar(stat){
   rankLabel.textContent = rank;
   rankLabel.style.color = rankColors[rank] || "#fff";
   rankLabel.style.textShadow = `0 0 8px ${rankColors[rank] || "#38e8ff"}, 0 0 16px ${rankColors[rank] || "#38e8ff"}`;
-
+if (rank === "Unmeasurable") {
+  rankLabel.style.display = "block";      // forces it on its own line
+  rankLabel.style.textAlign = "left";     // align to left
+  rankLabel.style.marginLeft = "0";       // no offset
+}
   bar.innerHTML="";
   const ticks = Math.min(Math.floor(value/5),20);
   for(let i=0;i<20;i++){
@@ -402,3 +406,4 @@ for(let stat in stats) updateBar(stat);
 
 </body>
 </html>
+

@@ -1,4 +1,14 @@
 <!DOCTYPE html>
+<script>
+  if (window.location.pathname.endsWith("architecht.html") || 
+      window.location.pathname.endsWith("coming-soon.html")) {
+    // If someone tries to go directly, send them to start screen
+    if (!sessionStorage.getItem("enteredFromStart")) {
+      window.location.href = "index.html";
+    }
+  }
+</script>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -57,7 +67,8 @@
   <div class="coming-soon">
     <h1>🚧 System Coming Soon 🚧</h1>
     <p>The System mode will be available in a future update.</p>
-    <a href="start screen.html" class="back-btn">⬅ Back to Start</a>
+    <a href="index.html" class="back-btn">⬅ Back to Start</a>
   </div>
 </body>
 </html>
+

@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<script>
+  if (window.location.pathname.endsWith("architecht.html") || 
+      window.location.pathname.endsWith("coming-soon.html")) {
+    // If someone tries to go directly, send them to start screen
+    if (!sessionStorage.getItem("enteredFromStart")) {
+      window.location.href = "index.html";
+    }
+  }
+</script>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -584,4 +593,5 @@ function incrementStat(stat){
 for(let stat in stats) updateBar(stat);
 </script>
 </body>
+
 </html>     

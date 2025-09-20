@@ -52,14 +52,14 @@
 <body>
   <div class="start-container">
     <h1>Choose Your Mode</h1>
-    <button class="choice-btn" onclick="chooseMode('coming-soon')">System</button>
+    <button class="choice-btn" onclick="chooseMode('coming soon')">System</button>
     <button class="choice-btn" onclick="chooseMode('architect')">Architect</button>
   </div>
   <script>
   function chooseMode(mode) {
   sessionStorage.setItem("enteredFromStart", "true"); // mark entry
   if (mode === 'system') {
-    window.location.href = 'coming-soon.html';
+    window.location.href = 'coming soon.html';
   } else if (mode === 'architect') {
     window.location.href = 'architecht.html';
   }
@@ -67,6 +67,7 @@
   </script>
 </body>
 </html>
+
 
 
 

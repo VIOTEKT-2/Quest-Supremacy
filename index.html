@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -55,14 +56,15 @@
     <button class="choice-btn" onclick="chooseMode('architect')">Architect</button>
   </div>
   <script>
-    function chooseMode(mode) {
-      // Correct logic and spelling for redirect
-      if (mode === 'system') {
-        window.location.href = 'coming soon.html';
-      } else if (mode === 'architect') {
-        window.location.href = 'architecht.html';
-      }
-    }
+  function chooseMode(mode) {
+  sessionStorage.setItem("enteredFromStart", "true"); // mark entry
+  if (mode === 'system') {
+    window.location.href = 'coming-soon.html';
+  } else if (mode === 'architect') {
+    window.location.href = 'architecht.html';
+  }
+}
   </script>
 </body>
 </html>
+
